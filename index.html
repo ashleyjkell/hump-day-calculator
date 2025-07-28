@@ -5,13 +5,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Lift Weight Calculator</title>
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      overflow-x: hidden;
+      margin: 0;
+      padding: 0;
+    }
+
     body {
       font-family: 'Segoe UI', sans-serif;
       background: linear-gradient(135deg, #0f172a, #1e293b);
       color: #f1f5f9;
       padding: 1rem;
-      margin: 0;
     }
+
     .tracker {
       background: #1e293b;
       padding: 2rem;
@@ -19,8 +29,9 @@
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
       width: 100%;
       max-width: 400px;
-      margin: 0 auto; /* Center horizontally */
+      margin: 0 auto;
     }
+
     h1 {
       text-align: center;
       font-size: 1.5rem;
@@ -37,6 +48,7 @@
 
     input[type="number"] {
       width: 100%;
+      max-width: 100%;
       padding: 0.75rem;
       border-radius: 0.5rem;
       border: none;
@@ -64,6 +76,7 @@
       display: flex;
       align-items: center;
       margin-top: 1rem;
+      margin-bottom: 1rem;
     }
 
     .checkbox input {
@@ -106,7 +119,7 @@
     </div>
 
     <div class="result" id="liftWeightDisplay">Target Lift Weight: —</div>
-    <div class="note">Note: If using dumbbells, this is the weight **per hand**. Remember to round up to the nearest available weight.</div>
+    <div class="note">Note: If using dumbbells, this is the weight <strong>per hand</strong>. Remember to round up to the nearest available weight.</div>
   </div>
 
   <script>

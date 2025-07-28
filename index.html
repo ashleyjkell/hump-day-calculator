@@ -7,61 +7,7 @@
   <link rel="manifest" href="manifest.json" />
   <link rel="icon" href="icon.png" type="image/png" />
   <meta name="theme-color" content="#38bdf8" />
-  <style>
-    * { box-sizing: border-box; }
-    html, body { overflow-x: hidden; margin: 0; padding: 0; }
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(135deg, #0f172a, #1e293b);
-      color: #f1f5f9;
-      padding: 1rem;
-    }
-    .tabs { display: flex; gap: 0.5rem; justify-content: center; margin-bottom: 1rem; flex-wrap: wrap; }
-    .tabs button {
-      background: #334155; color: #f8fafc; border: none;
-      padding: 0.6rem 1rem; border-radius: 0.5rem; font-size: 1rem; cursor: pointer;
-    }
-    .tabs button.active { background: #38bdf8; color: #0f172a; font-weight: bold; }
-    .tab-content { display: none; }
-    .tab-content.active { display: block; }
-    .tracker {
-      background: #1e293b; padding: 2rem; border-radius: 1rem;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-      width: 100%; max-width: 400px; margin: 0 auto;
-    }
-    h1, h2 { text-align: center; color: #38bdf8; margin-bottom: 1.5rem; }
-    label {
-      display: block; margin-bottom: 0.5rem; font-weight: bold; color: #94a3b8;
-    }
-    input[type="number"] {
-      width: 100%; padding: 0.75rem; border-radius: 0.5rem;
-      border: none; margin-bottom: 1.5rem; font-size: 1rem;
-      background: #334155; color: #f8fafc;
-    }
-    .result {
-      background: #0f172a; padding: 1rem; border-radius: 0.5rem;
-      margin-top: 1rem; font-size: 1.1rem; text-align: center; color: #facc15;
-    }
-    .checkbox {
-      display: flex; align-items: center;
-      margin-top: 1rem; margin-bottom: 1rem;
-    }
-    .checkbox input { margin-right: 0.5rem; transform: scale(1.2); }
-    .note {
-      margin-top: 1rem; font-size: 0.9rem; color: #94a3b8; text-align: center;
-    }
-    button#installButton {
-      background: #38bdf8; color: #0f172a; font-weight: bold;
-      padding: 0.75rem 1.2rem; border-radius: 0.5rem; border: none;
-      display: block; margin: 0 auto; font-size: 1rem; cursor: pointer;
-    }
-    .unit-toggle { text-align: center; margin-top: -1rem; margin-bottom: 1rem; }
-    .unit-toggle label { font-weight: normal; margin: 0 0.25rem; }
-    .unit-toggle select {
-      background: #334155; color: #f8fafc; border-radius: 0.5rem;
-      padding: 0.4rem 0.7rem; font-size: 1rem; border: none;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="tabs" id="tabButtons">
@@ -70,7 +16,64 @@
     <button data-tab="install" id="installTabButton" hidden>Install App</button>
   </div>
 
-  <!-- Tabs content will be handled by JS (too long for this cell). Will add separately below. -->
+  <!-- Lift Calculator -->
+  <div id="lift" class="tab-content active">
+    <div class="tracker">
+      <h1>Lift Calculator</h1>
+      <div class="unit-toggle">
+        <label for="unitSelect">Units:</label>
+        <select id="unitSelect">
+          <option value="kg">kg</option>
+          <option value="lbs">lbs</option>
+        </select>
+      </div>
+      <label for="weight">Body Weight</label>
+      <input type="number" id="weight" placeholder="e.g. 80" step="0.1" />
+      <label for="bodyFat">Body Fat (%)</label>
+      <input type="number" id="bodyFat" placeholder="e.g. 20" step="0.1" />
+      <div class="result" id="lbmDisplay">Lean Body Mass: —</div>
+      <label for="percentToLift">% of LBM to Lift</label>
+      <input type="number" id="percentToLift" placeholder="e.g. 75" step="0.1" />
+      <div class="checkbox">
+        <input type="checkbox" id="dumbbellMode" />
+        <label for="dumbbellMode">Using Dumbbells?</label>
+      </div>
+      <div class="result" id="liftWeightDisplay">Target Lift Weight: —</div>
+      <div class="note">If using dumbbells, this is the weight <strong>per hand</strong>.</div>
+    </div>
+  </div>
+
+  <!-- RPE Calculator -->
+  <div id="rpe" class="tab-content">
+    <div class="tracker">
+      <h1>RPE Calculator</h1>
+      <div class="unit-toggle">
+        <label for="rpeUnitSelect">Units:</label>
+        <select id="rpeUnitSelect">
+          <option value="kg">kg</option>
+          <option value="lbs">lbs</option>
+        </select>
+      </div>
+      <label for="rpeWeight">Weight Lifted</label>
+      <input type="number" id="rpeWeight" placeholder="e.g. 100" step="0.1" />
+      <label for="rpeValue">RPE (6–10)</label>
+      <input type="number" id="rpeValue" placeholder="e.g. 8.5" step="0.5" min="6" max="10" />
+      <label for="reps">Reps Performed</label>
+      <input type="number" id="reps" placeholder="e.g. 5" min="1" max="12" step="1" />
+      <div class="result" id="rpe1RMDisplay">Estimated 1RM: —</div>
+      <div class="note">Based on RPE chart estimates. Converted to selected unit.</div>
+    </div>
+  </div>
+
+  <!-- Install Tab -->
+  <div id="install" class="tab-content">
+    <div class="tracker">
+      <h2>Install This App</h2>
+      <p style="text-align:center;">Install this tool on your device for offline use and quick access from your home screen.</p>
+      <button id="installButton">Install Now</button>
+    </div>
+  </div>
+
   <script src="app.js"></script>
 </body>
 </html>

@@ -8,23 +8,18 @@
   <link rel="icon" href="icon.png" type="image/png" />
   <meta name="theme-color" content="#38bdf8" />
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
+    * { box-sizing: border-box; }
     html, body {
       overflow-x: hidden;
       margin: 0;
       padding: 0;
     }
-
     body {
       font-family: 'Segoe UI', sans-serif;
       background: linear-gradient(135deg, #0f172a, #1e293b);
       color: #f1f5f9;
       padding: 1rem;
     }
-
     .tracker {
       background: #1e293b;
       padding: 2rem;
@@ -34,24 +29,20 @@
       max-width: 400px;
       margin: 0 auto;
     }
-
     h1 {
       text-align: center;
       font-size: 1.5rem;
       margin-bottom: 2rem;
       color: #38bdf8;
     }
-
     label {
       display: block;
       margin-bottom: 0.5rem;
       font-weight: bold;
       color: #94a3b8;
     }
-
     input[type="number"] {
       width: 100%;
-      max-width: 100%;
       padding: 0.75rem;
       border-radius: 0.5rem;
       border: none;
@@ -60,11 +51,9 @@
       background: #334155;
       color: #f8fafc;
     }
-
     input[type="number"]::placeholder {
       color: #64748b;
     }
-
     .result {
       background: #0f172a;
       padding: 1rem;
@@ -74,36 +63,46 @@
       text-align: center;
       color: #facc15;
     }
-
     .checkbox {
       display: flex;
       align-items: center;
-      margin-top: 1rem;
-      margin-bottom: 1rem;
+      margin: 1rem 0;
     }
-
     .checkbox input {
       margin-right: 0.5rem;
       transform: scale(1.2);
     }
-
+    .unit-toggle {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    .unit-toggle button {
+      background: #334155;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      color: #f1f5f9;
+      font-weight: bold;
+      cursor: pointer;
+    }
     .note {
       margin-top: 1rem;
       font-size: 0.9rem;
       color: #94a3b8;
       text-align: center;
     }
-
-    .spacer {
-      height: 1rem;
-    }
+    .spacer { height: 1rem; }
   </style>
 </head>
 <body>
   <div class="tracker">
     <h1>Lift Weight Calculator</h1>
 
-    <label for="weight">Body Weight (kg)</label>
+    <div class="unit-toggle">
+      <button id="unitToggle">Switch to lbs</button>
+    </div>
+
+    <label for="weight">Body Weight (<span id="unitLabel">kg</span>)</label>
     <input type="number" id="weight" placeholder="e.g. 80" step="0.1" />
 
     <label for="bodyFat">Body Fat (%)</label>
@@ -132,36 +131,61 @@
     const dumbbellCheckbox = document.getElementById('dumbbellMode');
     const lbmDisplay = document.getElementById('lbmDisplay');
     const liftWeightDisplay = document.getElementById('liftWeightDisplay');
+    const unitToggle = document.getElementById('unitToggle');
+    const unitLabel = document.getElementById('unitLabel');
+
+    let unit = 'kg'; // default unit
+
+    function convertWeight(value, to) {
+      return to === 'lbs' ? value * 2.20462 : value / 2.20462;
+    }
 
     function updateCalculations() {
-      const weight = parseFloat(weightInput.value);
+      let weight = parseFloat(weightInput.value);
       const bodyFat = parseFloat(bodyFatInput.value);
       const percentToLift = parseFloat(percentToLiftInput.value);
       const usingDumbbells = dumbbellCheckbox.checked;
 
-      if (!isNaN(weight) && !isNaN(bodyFat)) {
-        const lbm = weight * (1 - bodyFat / 100);
-        lbmDisplay.textContent = `Lean Body Mass: ${lbm.toFixed(1)} kg`;
-
-        if (!isNaN(percentToLift)) {
-          let liftWeight = lbm * (percentToLift / 100);
-          if (usingDumbbells) {
-            liftWeight /= 2;
-          }
-          liftWeightDisplay.textContent = `Target Lift Weight: ${liftWeight.toFixed(1)} kg`;
-        } else {
-          liftWeightDisplay.textContent = `Target Lift Weight: —`;
-        }
-      } else {
+      if (isNaN(weight) || isNaN(bodyFat)) {
         lbmDisplay.textContent = `Lean Body Mass: —`;
         liftWeightDisplay.textContent = `Target Lift Weight: —`;
+        return;
       }
+
+      const lbm = weight * (1 - bodyFat / 100);
+      lbmDisplay.textContent = `Lean Body Mass: ${lbm.toFixed(1)} ${unit}`;
+
+      if (!isNaN(percentToLift)) {
+        let liftWeight = lbm * (percentToLift / 100);
+        if (usingDumbbells) liftWeight /= 2;
+        liftWeightDisplay.textContent = `Target Lift Weight: ${liftWeight.toFixed(1)} ${unit}`;
+      } else {
+        liftWeightDisplay.textContent = `Target Lift Weight: —`;
+      }
+    }
+
+    function toggleUnits() {
+      const newUnit = unit === 'kg' ? 'lbs' : 'kg';
+      const convertTo = newUnit;
+
+      // Convert weight input
+      let weight = parseFloat(weightInput.value);
+      if (!isNaN(weight)) {
+        weight = convertWeight(weight, convertTo);
+        weightInput.value = weight.toFixed(1);
+      }
+
+      unit = newUnit;
+      unitLabel.textContent = unit;
+      unitToggle.textContent = `Switch to ${unit === 'kg' ? 'lbs' : 'kg'}`;
+      updateCalculations();
     }
 
     weightInput.addEventListener('input', updateCalculations);
     bodyFatInput.addEventListener('input', updateCalculations);
     percentToLiftInput.addEventListener('input', updateCalculations);
     dumbbellCheckbox.addEventListener('change', updateCalculations);
+    unitToggle.addEventListener('click', toggleUnits);
   </script>
 
   <script>

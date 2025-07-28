@@ -1,1 +1,15 @@
-{ "name": "Lift Tools", "short_name": "LiftCalc" }
+{
+  "name": "Lift Tools",
+  "short_name": "LiftCalc",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#38bdf8",
+  "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
